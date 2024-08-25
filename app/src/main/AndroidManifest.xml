@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Movies"
         tools:targetApi="31">
         <activity
-            android:name=".ui.SearchActvity"
+            android:name=".ui.SearchActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"

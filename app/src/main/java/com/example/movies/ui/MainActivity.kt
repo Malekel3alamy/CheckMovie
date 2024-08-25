@@ -3,17 +3,14 @@ package com.example.movies.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -22,9 +19,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.movies.R
 import com.example.movies.databinding.ActivityMainBinding
-import com.example.movies.repo.MoviesRepo
-import com.example.movies.room.MoviesDatabase
-import com.example.movies.ui.fragments.MoviesFragment
+import com.example.movies.ui.fragments.SearchFragment
 import com.example.movies.worker.UpdateWorker
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.Duration
@@ -68,8 +63,17 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
         binding.searchIcon.setOnClickListener {
-            val intent = Intent(this, SearchActvity::class.java)
-            startActivity(intent)
+            hideToolbarAndNavigationView()
+               when(navController.currentDestination?.id){
+                   R.id.nowPlayingFragment -> {
+                       navController.navigate(R.id.action_nowPlayingFragment_to_searchFragment)
+                   }
+                   R.id.popularFragment ->{ navController.navigate(R.id.action_popularFragment_to_searchFragment)}
+                   R.id.topRatedFragment ->{navController.navigate(R.id.action_topRatedFragment_to_searchFragment)}
+                   R.id.upComingFragment -> {navController.navigate(R.id.action_upComingFragment_to_searchFragment)}
+                   else -> Unit
+               }
+
         }
 
     }

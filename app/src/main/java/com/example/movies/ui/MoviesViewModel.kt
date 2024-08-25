@@ -6,16 +6,24 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.movies.models.Movie
 import com.example.movies.models.MovieResponse
 import com.example.movies.models.details.DetailsResponse
+import com.example.movies.paging.NowPlayingMoviesPagingSource
+import com.example.movies.paging.PopularMoviesPagingSource
+import com.example.movies.paging.SearchMoviesPagingSource
+import com.example.movies.paging.TopRatedMoviesPagingSource
+import com.example.movies.paging.UpComingMoviesPagingSource
 import com.example.movies.repo.MoviesRepo
 import com.example.movies.utils.Resources
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -23,13 +31,30 @@ import javax.inject.Inject
 @HiltViewModel
 class MoviesViewModel @Inject constructor( private val moviesRepo: MoviesRepo) : ViewModel() {
 
-    val popularMovies = MutableLiveData<Resources<MovieResponse>>()
-    val nowPlayingMovies = MutableLiveData<Resources<MovieResponse>>()
-    val topRatedMovies = MutableLiveData<Resources<MovieResponse>>()
-    val upcomingMovies = MutableLiveData<Resources<MovieResponse>>()
+    val popularMovies = Pager(PagingConfig(1)){
+        PopularMoviesPagingSource(moviesRepo)
+    }.flow.cachedIn(viewModelScope)
 
+    val nowPlayingMovies = Pager(PagingConfig(1)){
+        NowPlayingMoviesPagingSource(moviesRepo)
+    }.flow.cachedIn(viewModelScope)
 
-    val searchMovies = MutableLiveData<Resources<MovieResponse>>()
+    val topRatedMovies = Pager(PagingConfig(1)){
+        TopRatedMoviesPagingSource(moviesRepo)
+    }.flow.cachedIn(viewModelScope)
+
+    val upcomingMovies = Pager(PagingConfig(1)){
+        UpComingMoviesPagingSource(moviesRepo)
+    }.flow.cachedIn(viewModelScope)
+
+    var searchMovies :  Flow<PagingData<Movie>>? = null
+
+fun searchMovie(keyword: String){
+     searchMovies = Pager(PagingConfig(1)){
+        SearchMoviesPagingSource(keyword,moviesRepo)
+    }.flow.cachedIn(viewModelScope)
+}
+
 
     var newSearchQuery : String? = null
     var oldSearchQuery:String? = null
@@ -55,7 +80,7 @@ class MoviesViewModel @Inject constructor( private val moviesRepo: MoviesRepo) :
 
 
 
-    fun getPopularMovies(page_number : Int) = viewModelScope.launch {
+  /*  fun getPopularMovies(page_number : Int) = viewModelScope.launch {
          popularMovies.postValue(Resources.Loading())
         try {
             popularMovies.postValue(handleMovieResponse(moviesRepo.getPopularMovies(page_number)))
@@ -63,22 +88,22 @@ class MoviesViewModel @Inject constructor( private val moviesRepo: MoviesRepo) :
         }catch (e:Exception){
         }
 
-    }
+    }*/
 
 
 
 
 
 
-    fun getUpComingMovies(page_number : Int) = viewModelScope.launch {
+ /*   fun getUpComingMovies(page_number : Int) = viewModelScope.launch {
         upcomingMovies.postValue(Resources.Loading())
 
             upcomingMovies.postValue(handleMovieResponse(moviesRepo.getUpcomingMovies(page_number)))
 
 
-    }
+    }*/
 
-    fun getNowPlayingMovies(page_number : Int) = viewModelScope.launch {
+ /*   fun getNowPlayingMovies(page_number : Int) = viewModelScope.launch {
         nowPlayingMovies.postValue(Resources.Loading())
         try {
             nowPlayingMovies.postValue(handleMovieResponse(moviesRepo.getNowPlayingMovies(page_number)))
@@ -87,9 +112,9 @@ class MoviesViewModel @Inject constructor( private val moviesRepo: MoviesRepo) :
             Log.d("ViewModel","${e.message}")
         }
 
-    }
+    }*/
 
-    fun getTopRatedMovies(page_number : Int) = viewModelScope.launch {
+ /*   fun getTopRatedMovies(page_number : Int) = viewModelScope.launch {
         topRatedMovies.postValue(Resources.Loading())
         try {
             topRatedMovies.postValue(handleMovieResponse(moviesRepo.getTopRatedMovies(page_number)))
@@ -98,7 +123,7 @@ class MoviesViewModel @Inject constructor( private val moviesRepo: MoviesRepo) :
             Log.d("ViewModel","${e.message}")
         }
 
-    }
+    }*/
 
     // handle network Response
 
@@ -149,12 +174,12 @@ class MoviesViewModel @Inject constructor( private val moviesRepo: MoviesRepo) :
     }
 
 
-    fun  search (keywords:String , page_number: Int) =viewModelScope.launch {
+ /*   fun  search (keywords:String , page_number: Int) =viewModelScope.launch {
         searchMovies.postValue(Resources.Loading())
 
         searchMovies.postValue(handleSearchMovie(moviesRepo.search(keywords,page_number)))
 
-    }
+    }*/
 
     private fun handleSearchMovie(
       response :  Response<MovieResponse>
@@ -197,10 +222,6 @@ fun  upsertMovies(moviesList : List<Movie>) = viewModelScope.launch {
 
 fun  updateMoviesDataAndApi() = viewModelScope.launch {
 
-    getUpComingMovies(2)
-    getPopularMovies(1)
-    getTopRatedMovies(3)
-    getNowPlayingMovies(4)
     deleteAll()
     upsertMovies(roomMovies?.value!!.toList() )
 

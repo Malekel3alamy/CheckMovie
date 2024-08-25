@@ -24,6 +24,14 @@
         <action
             android:id="@+id/action_nowPlayingFragment_to_topRatedFragment"
             app:destination="@id/topRatedFragment" />
+        <action
+            android:id="@+id/action_nowPlayingFragment_to_popularFragment"
+            app:destination="@id/popularFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim" />
+        <action
+            android:id="@+id/action_nowPlayingFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/popularFragment"
@@ -36,19 +44,11 @@
         <action
             android:id="@+id/action_popularFragment_to_upComingFragment"
             app:destination="@id/upComingFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.example.movies.ui.fragments.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_moviesFragment"
-            app:destination="@id/moviesFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_popularFragment"
-            app:destination="@id/popularFragment" />
+            android:id="@+id/action_popularFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/topRatedFragment"
         android:name="com.example.movies.ui.fragments.TopRatedFragment"
@@ -60,6 +60,7 @@
         <action
             android:id="@+id/action_topRatedFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/upComingFragment"
@@ -72,5 +73,17 @@
         <action
             android:id="@+id/action_upComingFragment_to_nowPlayingFragment"
             app:destination="@id/nowPlayingFragment" />
+        <action
+            android:id="@+id/action_upComingFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.movies.ui.fragments.SearchFragment"
+        tools:layout="@layout/fragment_search"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_moviesFragment"
+            app:destination="@id/moviesFragment" />
     </fragment>
 </navigation>

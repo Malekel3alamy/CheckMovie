@@ -6,6 +6,6 @@ class Constants {
          val BASE_URL = "https://api.themoviedb.org/3/"
         val  QUERY_PAGE_SIZE = 40
 
-        const val SEARCH_TIME_DELAY = 5000L
+        const val SEARCH_TIME_DELAY = 4000L
     }
 }

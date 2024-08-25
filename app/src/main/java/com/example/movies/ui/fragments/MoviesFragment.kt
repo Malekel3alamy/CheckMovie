@@ -31,11 +31,12 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMoviesBinding.bind(view)
 
-        (activity as MainActivity).hideToolbarAndNavigationView()
+
 
 
         // Getting Movie Id
         if (arguments!= null){
+            (activity as MainActivity).hideToolbarAndNavigationView()
     val id = arguments?.getInt("id")
     if (id != null){
         moviesViewModel.getMovieDetails(id)

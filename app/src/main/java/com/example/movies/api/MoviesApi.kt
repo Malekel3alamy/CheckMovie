@@ -18,7 +18,7 @@ interface MoviesApi {
         @Query("query")
         query: String ,
         @Query("page")
-        pageNumber: Int =1 ,
+        pageNumber: Int  ,
     ) : Response<MovieResponse>
 
     @GET("movie/top_rated")
