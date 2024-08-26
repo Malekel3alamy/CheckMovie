@@ -1,6 +1,7 @@
 package com.example.movies.ui
 
 import android.content.Context
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.room.Query
 import com.example.movies.models.Movie
 import com.example.movies.models.MovieResponse
 import com.example.movies.models.details.DetailsResponse
@@ -23,6 +25,7 @@ import com.example.movies.paging.UpComingMoviesPagingSource
 import com.example.movies.repo.MoviesRepo
 import com.example.movies.utils.Resources
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -66,7 +69,7 @@ fun searchMovie(keyword: String){
      var detailsResponse =  MutableLiveData<DetailsResponse>()
 
 
-    var roomMovies : LiveData<ArrayList<Movie>>? = null
+    var roomMovies : MutableLiveData<List<Movie>>? = null
 
     // get Movie Details
 
@@ -75,7 +78,50 @@ fun searchMovie(keyword: String){
        detailsResponse.value =  moviesRepo.getDetails(movie_id)
     }
 
+    suspend fun  upsertMovies(movies : Movie):Boolean {
+        var  result = false
+        viewModelScope.async {
 
+             moviesRepo.upsert(movies)
+            result = true
+
+        }.await()
+        return result
+    }
+    // Get All Movies
+    suspend fun getAllMoviesFromRoom() {
+        roomMovies = MutableLiveData()
+        val movies= moviesRepo.getAllData()
+        if (movies!= null){
+            roomMovies?.postValue(movies)
+        }
+    }
+
+
+
+    fun cursorToMovieList(cursor: Cursor): List<Movie> {
+        val movies = mutableListOf<Movie>()
+        while (cursor.moveToNext()) {
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+            val backdrop_path = cursor.getString(cursor.getColumnIndexOrThrow("backdrop_path"))
+            val genre_ids = cursor.getInt(cursor.getColumnIndexOrThrow("genre_ids"))
+            val original_language = cursor.getString(cursor.getColumnIndexOrThrow("original_language"))
+            val original_title = cursor.getString(cursor.getColumnIndexOrThrow("original_title"))
+            val overview = cursor.getString(cursor.getColumnIndexOrThrow("overview"))
+            val popularity = cursor.getDouble(cursor.getColumnIndexOrThrow("popularity"))
+            val poster_path = cursor.getString(cursor.getColumnIndexOrThrow("poster_path"))
+            val release_date = cursor.getString(cursor.getColumnIndexOrThrow("release_date"))
+
+            val vote_average = cursor.getDouble(cursor.getColumnIndexOrThrow("vote_average"))
+            val vote_count = cursor.getInt(cursor.getColumnIndexOrThrow("vote_count"))
+
+            // ... extract other properties
+            movies.add(Movie(null,backdrop_path,
+                listOf(genre_ids),id,original_language,original_title,overview,popularity,poster_path,release_date,title,null,vote_average,vote_count))}
+        cursor.close()
+        return movies
+    }
 
 
 
@@ -204,14 +250,9 @@ fun searchMovie(keyword: String){
 
     }
 
-//  Upsert Articles
-fun  upsertMovies(moviesList : List<Movie>) = viewModelScope.launch {
 
-    moviesRepo.upsert(moviesList)
 
-}
-// Get All Articles
-    fun getAllArticlesFromRoom() = moviesRepo.getAllData()
+
 
 
     // delete data inside database
@@ -219,13 +260,31 @@ fun  upsertMovies(moviesList : List<Movie>) = viewModelScope.launch {
         moviesRepo.deleteAll()
     }
 
+    fun deleteMovie(movies:Movie) =viewModelScope.launch {
+        moviesRepo.deleteMovie(movies)
+    }
 
-fun  updateMoviesDataAndApi() = viewModelScope.launch {
+    fun  updateMoviesDataAndApi() = viewModelScope.launch {
 
-    deleteAll()
-    upsertMovies(roomMovies?.value!!.toList() )
+        deleteAll()
+       // upsertMovies(roomMovies?.value!!.toList() )
 
-}
+    }
+
+    suspend fun getMovie(id:Int) :Boolean {
+        var movie :Movie?= null
+        viewModelScope.async {
+             movie = moviesRepo.getMovie(id)
+
+        }.await()
+
+        if (movie == null){
+            return false
+        }else{
+            return true
+        }
+    }
+
 
 
 

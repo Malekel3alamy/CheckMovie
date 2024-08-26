@@ -2,28 +2,22 @@ package com.example.movies.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AbsListView
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.adapter.MovieRecyclerAdapter
-import com.example.movies.adapter.NowPlayingMoviesAdapter
 import com.example.movies.databinding.FragmentPopularBinding
 import com.example.movies.ui.MainActivity
 import com.example.movies.ui.MoviesViewModel
-import com.example.movies.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,7 +43,7 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
 
             val bundle = Bundle().apply {
                 if (movie.id != null)
-                    putInt("id", movie.id!!)
+                    putParcelable("movie", movie)
             }
             findNavController().navigate(R.id.action_popularFragment_to_moviesFragment,bundle)
         }
@@ -78,10 +72,10 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
         }
     }else{
 
-            moviesViewModel.getAllArticlesFromRoom().observe(viewLifecycleOwner, Observer {
+        /*    moviesViewModel.getAllMoviesFromRoom().observe(viewLifecycleOwner, Observer {
 
                 moviesAdapter.differ.submitList(it.toList())
-            })
+            })*/
         }
 
         retryButton.setOnClickListener {

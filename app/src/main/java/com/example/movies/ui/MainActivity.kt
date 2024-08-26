@@ -55,28 +55,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         showToolbarAndNavigationView()
 
-        initWorker()
+       // initWorker()
 
         // NavController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        binding.searchIcon.setOnClickListener {
+        binding.searchIconMainActivity.setOnClickListener {
             hideToolbarAndNavigationView()
-               when(navController.currentDestination?.id){
-                   R.id.nowPlayingFragment -> {
-                       navController.navigate(R.id.action_nowPlayingFragment_to_searchFragment)
-                   }
-                   R.id.popularFragment ->{ navController.navigate(R.id.action_popularFragment_to_searchFragment)}
-                   R.id.topRatedFragment ->{navController.navigate(R.id.action_topRatedFragment_to_searchFragment)}
-                   R.id.upComingFragment -> {navController.navigate(R.id.action_upComingFragment_to_searchFragment)}
-                   else -> Unit
-               }
-
+            navController.navigate(R.id.searchFragment)
         }
 
+        binding.bookmarksIcon.setOnClickListener {
+            hideToolbarAndNavigationView()
+            navController.navigate(R.id.bookMarksFragment)
+        }
     }
+
  fun hideToolbarAndNavigationView(){
      binding.bottomNavigationView.visibility = View.GONE
      binding.toolBar.visibility = View.GONE

@@ -24,7 +24,6 @@ class NowPlayingFragment : Fragment(R.layout.fragment_now_playing) {
     lateinit var binding: FragmentNowPlayingBinding
     lateinit var moviesAdapter : NowPlayingMoviesAdapter
 
-    private val pageNumber = 4
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +35,7 @@ class NowPlayingFragment : Fragment(R.layout.fragment_now_playing) {
 
             val bundle = Bundle().apply {
                 if (movie.id != null)
-                    putInt("id", movie.id!!)
+                    putParcelable("movie",movie)
             }
                 findNavController().navigate(R.id.action_nowPlayingFragment_to_moviesFragment,bundle)
         }
@@ -56,10 +55,10 @@ class NowPlayingFragment : Fragment(R.layout.fragment_now_playing) {
 
         }else{
 
-            moviesViewModel.getAllArticlesFromRoom().observe(viewLifecycleOwner, Observer {
+         /*  moviesViewModel.roomMovies.observe(viewLifecycleOwner, Observer {
 
-               // moviesAdapter.submitData(it.toList())
-            })
+                moviesAdapter.submitData(it.toList())
+            })*/
         }
 
         binding.itemMoviesError.retryButton.setOnClickListener {

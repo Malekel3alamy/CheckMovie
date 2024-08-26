@@ -11,13 +11,13 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.movies.R
 import com.example.movies.models.Movie
 
-class MovieRecyclerAdapter : PagingDataAdapter<Movie, com.example.movies.adapter.MovieRecyclerAdapter.MyViewHolder>(
-    differCallback ) {
+class BookmarksAdapter : RecyclerView.Adapter<BookmarksAdapter.MyViewHolder>() {
     class MyViewHolder (val view : View) : ViewHolder(view){
 
         val movieImage = view.findViewById<ImageView>(R.id.movie_image)
@@ -35,12 +35,15 @@ class MovieRecyclerAdapter : PagingDataAdapter<Movie, com.example.movies.adapter
         return MyViewHolder(itemView)
     }
 
+    override fun getItemCount(): Int {
+        return differ.currentList.size
+    }
 
 
     @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val movie = getItem(position)
+        val movie = differ.currentList[position]
 if (movie != null){
     holder.title.text = movie.title
     Log.d("MovieName",movie.title.toString())
@@ -61,8 +64,8 @@ if (movie != null){
 
 
 
- companion object{
-     val differCallback = object : DiffUtil.ItemCallback<Movie>() {
+
+     private val differCallback = object : DiffUtil.ItemCallback<Movie>() {
          override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
              return oldItem.title == newItem.title
          }
@@ -73,7 +76,7 @@ if (movie != null){
 
      }
 
- }
+
 
 
     val differ = AsyncListDiffer(this, differCallback)

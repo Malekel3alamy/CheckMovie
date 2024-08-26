@@ -1,6 +1,7 @@
 package com.example.movies.room
 
 import android.content.Context
+import android.database.Cursor
 import androidx.room.Database
 import androidx.room.DeleteTable
 import androidx.room.Entity
@@ -43,6 +44,7 @@ import com.example.movies.models.Movie
                  MoviesDatabase::class.java,
                  "movies_db.db").build()
      }
+
 
 
 }

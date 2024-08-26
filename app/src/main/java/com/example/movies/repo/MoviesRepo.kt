@@ -1,5 +1,7 @@
 package com.example.movies.repo
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.movies.api.RetrofitInstance
 import com.example.movies.models.Movie
 import com.example.movies.room.MoviesDatabase
@@ -27,12 +29,18 @@ class MoviesRepo @Inject constructor(val db:MoviesDatabase) {
 
 
    // Insert Data To Room
-   suspend fun  upsert(moviesList:List<Movie>) = db.getMoviesDao().upsert(moviesList)
+   suspend fun  upsert(movies:Movie)  = db.getMoviesDao().upsert(movies)
 
    // Delete All Room Database
    suspend fun deleteAll() = db.getMoviesDao().deleteAllMovies()
 
    // Get All Data From Room
-   fun getAllData() = db.getMoviesDao().getAllMovies()
+   suspend   fun getAllData(): List<Movie> = db.getMoviesDao().getAllMovies()
+
+   // Delete One Movie
+
+   suspend fun deleteMovie(movies:Movie) = db.getMoviesDao().deleteMovie(movies)
+
+   suspend fun getMovie(id:Int) :Movie = db.getMoviesDao().getMovie(id)
 
 }
