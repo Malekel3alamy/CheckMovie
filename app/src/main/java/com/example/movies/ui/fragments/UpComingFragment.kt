@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class UpComingFragment : Fragment(R.layout.fragment_up_coming) {
-    val moviesViewModel: MoviesViewModel by viewModels()
+ /*   val moviesViewModel: MoviesViewModel by viewModels()
     lateinit var binding: FragmentUpComingBinding
     lateinit var moviesAdapter : MovieRecyclerAdapter
 
@@ -117,5 +117,5 @@ class UpComingFragment : Fragment(R.layout.fragment_up_coming) {
         errorText.text = message
     }
 
-
+*/
 }

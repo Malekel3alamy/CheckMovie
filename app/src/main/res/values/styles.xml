@@ -10,4 +10,11 @@
         <item name="cornerSizeBottomRight">8dp</item>
     </style>
 
+    <style name="CutCorners" >
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">0dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeTopRight">15dp</item>
+    </style>
+
 </resources>

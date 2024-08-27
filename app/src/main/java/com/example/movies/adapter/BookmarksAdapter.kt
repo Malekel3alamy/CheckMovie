@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -20,17 +18,18 @@ import com.example.movies.models.Movie
 class BookmarksAdapter : RecyclerView.Adapter<BookmarksAdapter.MyViewHolder>() {
     class MyViewHolder (val view : View) : ViewHolder(view){
 
-        val movieImage = view.findViewById<ImageView>(R.id.movie_image)
-        val title      = view.findViewById<TextView>(R.id.movie_title)
-        val date   = view.findViewById<TextView>(R.id.date)
-        val tvRating = view.findViewById<TextView>(R.id.numericRating)
-        val ratingBar = view.findViewById<RatingBar>(R.id.movieRatingBar)
+        val movieImage = view.findViewById<ImageView>(R.id.movie_imageBookmark)
+        val title      = view.findViewById<TextView>(R.id.movie_titleBookmark)
+        val date   = view.findViewById<TextView>(R.id.dateBookmark)
+        val tvRating = view.findViewById<TextView>(R.id.movieRate)
+        val views = view.findViewById<TextView>(R.id.movieViews)
+        val genre = view.findViewById<TextView>(R.id.movieGenre)
 
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.bookmarks_item,parent,false)
 
         return MyViewHolder(itemView)
     }
@@ -50,7 +49,7 @@ if (movie != null){
     holder.date.text = movie.release_date
     val average = movie.vote_average?.toFloat()
     holder.tvRating.text = String.format("%1.1f",average)
-    holder.ratingBar.rating = (movie.vote_average?.toFloat()!!/ 10 * 5)
+    holder.views.text = movie.popularity.toString()
     Glide.with(holder.itemView).load("https://image.tmdb.org/t/p/w500/${movie.poster_path}").into(holder.movieImage)
 
     holder.itemView. setOnClickListener{

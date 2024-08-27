@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PopularFragment : Fragment(R.layout.fragment_popular) {
-     val moviesViewModel: MoviesViewModel by viewModels()
+  /*   val moviesViewModel: MoviesViewModel by viewModels()
     lateinit var binding: FragmentPopularBinding
     lateinit var moviesAdapter : MovieRecyclerAdapter
 
@@ -118,5 +118,5 @@ class PopularFragment : Fragment(R.layout.fragment_popular) {
         errorText.text = message
     }
 
-
+*/
 }

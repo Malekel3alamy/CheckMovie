@@ -34,6 +34,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MoviesViewModel @Inject constructor( private val moviesRepo: MoviesRepo) : ViewModel() {
 
+    var detailsResponse =  MutableLiveData<DetailsResponse>()
+
+
+    var roomMovies : MutableLiveData<List<Movie>>? = null
+
+
     val popularMovies = Pager(PagingConfig(1)){
         PopularMoviesPagingSource(moviesRepo)
     }.flow.cachedIn(viewModelScope)
@@ -59,17 +65,6 @@ fun searchMovie(keyword: String){
 }
 
 
-    var newSearchQuery : String? = null
-    var oldSearchQuery:String? = null
-
-    var  searchMoviePage = 1
-
-    private var movieResponse : MovieResponse? = null
-    private var searchMovieResponse : MovieResponse? = null
-     var detailsResponse =  MutableLiveData<DetailsResponse>()
-
-
-    var roomMovies : MutableLiveData<List<Movie>>? = null
 
     // get Movie Details
 
@@ -98,107 +93,6 @@ fun searchMovie(keyword: String){
     }
 
 
-
-    fun cursorToMovieList(cursor: Cursor): List<Movie> {
-        val movies = mutableListOf<Movie>()
-        while (cursor.moveToNext()) {
-            val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-            val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
-            val backdrop_path = cursor.getString(cursor.getColumnIndexOrThrow("backdrop_path"))
-            val genre_ids = cursor.getInt(cursor.getColumnIndexOrThrow("genre_ids"))
-            val original_language = cursor.getString(cursor.getColumnIndexOrThrow("original_language"))
-            val original_title = cursor.getString(cursor.getColumnIndexOrThrow("original_title"))
-            val overview = cursor.getString(cursor.getColumnIndexOrThrow("overview"))
-            val popularity = cursor.getDouble(cursor.getColumnIndexOrThrow("popularity"))
-            val poster_path = cursor.getString(cursor.getColumnIndexOrThrow("poster_path"))
-            val release_date = cursor.getString(cursor.getColumnIndexOrThrow("release_date"))
-
-            val vote_average = cursor.getDouble(cursor.getColumnIndexOrThrow("vote_average"))
-            val vote_count = cursor.getInt(cursor.getColumnIndexOrThrow("vote_count"))
-
-            // ... extract other properties
-            movies.add(Movie(null,backdrop_path,
-                listOf(genre_ids),id,original_language,original_title,overview,popularity,poster_path,release_date,title,null,vote_average,vote_count))}
-        cursor.close()
-        return movies
-    }
-
-
-
-
-  /*  fun getPopularMovies(page_number : Int) = viewModelScope.launch {
-         popularMovies.postValue(Resources.Loading())
-        try {
-            popularMovies.postValue(handleMovieResponse(moviesRepo.getPopularMovies(page_number)))
-
-        }catch (e:Exception){
-        }
-
-    }*/
-
-
-
-
-
-
- /*   fun getUpComingMovies(page_number : Int) = viewModelScope.launch {
-        upcomingMovies.postValue(Resources.Loading())
-
-            upcomingMovies.postValue(handleMovieResponse(moviesRepo.getUpcomingMovies(page_number)))
-
-
-    }*/
-
- /*   fun getNowPlayingMovies(page_number : Int) = viewModelScope.launch {
-        nowPlayingMovies.postValue(Resources.Loading())
-        try {
-            nowPlayingMovies.postValue(handleMovieResponse(moviesRepo.getNowPlayingMovies(page_number)))
-
-        }catch (e:Exception){
-            Log.d("ViewModel","${e.message}")
-        }
-
-    }*/
-
- /*   fun getTopRatedMovies(page_number : Int) = viewModelScope.launch {
-        topRatedMovies.postValue(Resources.Loading())
-        try {
-            topRatedMovies.postValue(handleMovieResponse(moviesRepo.getTopRatedMovies(page_number)))
-
-        }catch (e:Exception){
-            Log.d("ViewModel","${e.message}")
-        }
-
-    }*/
-
-    // handle network Response
-
-    private fun handleMovieResponse(
-        response : Response<MovieResponse>
-    ) : Resources<MovieResponse>{
-
-        if(response.isSuccessful){
-            response.body()?.let{ resultResponse ->
-
-
-                if(movieResponse == null){
-                    movieResponse = resultResponse
-                    Log.d("HandleResponse1","Movies: ${resultResponse.results}")
-                }else{
-                   val oldMovies = movieResponse?.results
-                    val newMovies = resultResponse.results
-                    oldMovies?.addAll(newMovies)
-
-                }
-                return Resources.Success(movieResponse?:resultResponse)
-
-            }
-        }
-
-        return Resources.Error(response.message())
-
-    }
-
     fun internetConnection(context: Context) : Boolean {
         (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).apply{
 
@@ -210,9 +104,6 @@ fun searchMovie(keyword: String){
                     else -> false
                 }
             }
-
-
-
             return internetStatus?:false
 
         }
@@ -220,35 +111,9 @@ fun searchMovie(keyword: String){
     }
 
 
- /*   fun  search (keywords:String , page_number: Int) =viewModelScope.launch {
-        searchMovies.postValue(Resources.Loading())
 
-        searchMovies.postValue(handleSearchMovie(moviesRepo.search(keywords,page_number)))
 
-    }*/
 
-    private fun handleSearchMovie(
-      response :  Response<MovieResponse>
-    ) : Resources<MovieResponse>{
-        if(response.isSuccessful){
-            response.body()?.let { resultResponse ->
-                if(searchMovieResponse == null || newSearchQuery != oldSearchQuery){
-                    searchMovieResponse = resultResponse
-                    oldSearchQuery = newSearchQuery
-
-                }else{
-                    searchMoviePage++
-                    val oldArticles = searchMovieResponse?.results
-                    val newArticles = resultResponse.results
-
-                    oldArticles?.addAll(newArticles)
-                }
-                return Resources.Success(searchMovieResponse?:resultResponse)
-            }
-        }
-        return Resources.Error(response.message())
-
-    }
 
 
 

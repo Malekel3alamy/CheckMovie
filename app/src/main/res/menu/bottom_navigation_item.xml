@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="Now Playing"
-        android:id="@+id/nowPlayingFragment"
+    <item android:title="Movies"
+        android:icon="@drawable/ticket_1"
+        android:id="@+id/moviesFragment"
 
         />
-    <item android:title="Popular"
-        android:id="@+id/popularFragment"
+    <item android:title="Search"
+        android:icon="@drawable/search_outlined"
+        android:id="@+id/searchFragment"
         />
-    <item android:title="Top Rated"
-        android:id="@+id/topRatedFragment"
+    <item android:title="Bookmarks"
+        android:icon="@drawable/bookmark_outlined"
+        android:id="@+id/bookMarksFragment"
         />
-    <item android:title=" Upcoming"
-        android:id="@+id/upComingFragment"
-        />
+
 </menu>

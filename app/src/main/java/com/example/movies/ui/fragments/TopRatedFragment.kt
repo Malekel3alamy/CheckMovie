@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TopRatedFragment : Fragment(R.layout.fragment_top_rated) {
-     private val moviesViewModel: MoviesViewModel by viewModels()
+   /*  private val moviesViewModel: MoviesViewModel by viewModels()
     private lateinit var binding: FragmentTopRatedBinding
     private lateinit var moviesAdapter : MovieRecyclerAdapter
 
@@ -115,6 +115,6 @@ class TopRatedFragment : Fragment(R.layout.fragment_top_rated) {
         isError = true
         errorText.text = message
     }
-
+*/
 
 }

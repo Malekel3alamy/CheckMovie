@@ -37,6 +37,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMoviesBinding.bind(view)
 
+        showPR()
 
         // Getting Movie Id
         if (arguments!= null){
@@ -51,6 +52,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         lifecycleScope.launch {
             moviesViewModel.detailsResponse.observe(viewLifecycleOwner, Observer {
                 lifecycleScope.launch (Dispatchers.Main){
+                    hidePR()
                     binding.detailsTitle.text = it?.title
                     binding.detailsViews.text = "Views : " + it?.popularity.toString()
                     binding.detailsDate.text =   it?.release_date.toString()
@@ -130,6 +132,15 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         if (i){
             binding.bookmarkBlack.visibility = View.VISIBLE
         }
+    }
+
+    fun showPR(){
+        binding.moviePR.visibility = View.VISIBLE
+        binding.movieFragment.visibility= View.INVISIBLE
+    }
+    fun hidePR(){
+        binding.moviePR.visibility = View.GONE
+        binding.movieFragment.visibility= View.VISIBLE
     }
 
 

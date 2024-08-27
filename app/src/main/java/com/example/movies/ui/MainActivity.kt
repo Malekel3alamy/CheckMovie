@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -51,8 +52,10 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         showToolbarAndNavigationView()
 
        // initWorker()
@@ -62,25 +65,15 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        binding.searchIconMainActivity.setOnClickListener {
-            hideToolbarAndNavigationView()
-            navController.navigate(R.id.searchFragment)
-        }
-
-        binding.bookmarksIcon.setOnClickListener {
-            hideToolbarAndNavigationView()
-            navController.navigate(R.id.bookMarksFragment)
-        }
     }
 
  fun hideToolbarAndNavigationView(){
      binding.bottomNavigationView.visibility = View.GONE
-     binding.toolBar.visibility = View.GONE
+
  }
 
     fun showToolbarAndNavigationView(){
         binding.bottomNavigationView.visibility = View.VISIBLE
-        binding.toolBar.visibility = View.VISIBLE
     }
 
 

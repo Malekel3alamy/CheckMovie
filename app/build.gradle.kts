@@ -91,4 +91,7 @@ dependencies {
     // Pagination
     implementation("com.github.paginationspring:pagination:1.0.3")
 
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.2.0-alpha01")
+
 }

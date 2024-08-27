@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.R
 import com.example.movies.adapter.BookmarksAdapter
 import com.example.movies.adapter.NowPlayingMoviesAdapter
 import com.example.movies.databinding.FragmentBookMarksBinding
+import com.example.movies.ui.MainActivity
 import com.example.movies.ui.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,8 +30,18 @@ class BookMarksFragment : Fragment(R.layout.fragment_book_marks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBookMarksBinding.bind(view)
+        (activity as MainActivity).hideToolbarAndNavigationView()
 
         setUpRecycler()
+
+        bookmarksAdapter.onMovieClick={ movie ->
+
+            val bundle = Bundle().apply {
+                if (movie.id != null)
+                    putParcelable("movie",movie)
+            }
+            findNavController().navigate(R.id.action_bookMarksFragment_to_moviesFragment,bundle)
+        }
 
         lifecycleScope.launch {
             moviesViewModel.getAllMoviesFromRoom()
