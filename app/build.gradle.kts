@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.example.movies"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.movies"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -54,9 +54,21 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.androidx.paging.common.android)
     implementation(libs.androidx.paging.runtime.ktx)
+
     testImplementation(libs.junit)
+
+    testImplementation ("com.google.truth:truth:1.4.4")
+    testImplementation ("androidx.arch.core:core-testing:2.2.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation ("com.google.truth:truth:1.4.4")
+    androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation ("androidx.test:runner:1.6.2")
+    androidTestImplementation ("androidx.test:rules:1.6.1")
 
 
     // Room
@@ -66,32 +78,32 @@ dependencies {
     implementation ("androidx.room:room-ktx:2.6.1")
     // Coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
     // Coroutine Lifecycle Scopes
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.5")
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.11.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.5.0")
     // Navigation Components
-    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.8.0")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.8.0")
     // Glide
     implementation ("com.github.bumptech.glide:glide:4.13.0")
-    ksp ("com.github.bumptech.glide:compiler:4.13.0")
+    ksp ("com.github.bumptech.glide:compiler:4.16.0")
 
     // Work Manager
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     // Hilt
-    implementation ("com.google.dagger:hilt-android:2.51.1")
+    implementation ("com.google.dagger:hilt-android:2.52")
     kapt ("com.google.dagger:hilt-android-compiler:2.51.1")
 
     // Pagination
     implementation("com.github.paginationspring:pagination:1.0.3")
 
     // Splash Screen
-    implementation("androidx.core:core-splashscreen:1.2.0-alpha01")
+    implementation("androidx.core:core-splashscreen:1.2.0-alpha02")
 
 }
