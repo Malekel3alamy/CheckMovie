@@ -13,7 +13,8 @@ Movie App is an Android application built using Kotlin. It allows users to brows
 **Screenshots**: 
 
 !Screenshot 1 
-![Uploading image.png…]()
+![image jpeg](https://github.com/user-attachments/assets/73595e65-7a78-4a9f-92e0-d0ece1cf21d4)
+
 
 **Architecture** : 
 The app follows the MVVM (Model-View-ViewModel) architecture pattern:
